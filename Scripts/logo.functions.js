@@ -1,4 +1,4 @@
-/* Logo Functions module
+/* JSLogo Functions module
  * Author: Tymoteusz Paszun
  *
  */

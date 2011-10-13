@@ -1,4 +1,4 @@
-/* Logo Console module
+/* JSLogo Console module
  * Author: Tymoteusz Paszun
  * 
  * Requires: 

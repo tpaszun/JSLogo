@@ -55,9 +55,9 @@ test( "sum", function() {
 	raises( function() { funExecutor.execute('sum', []) }, 'INVALID_ARGUMENT_COUNT', "sum shall not be able to be called with 0 inputs" );
 	raises( function() { funExecutor.execute('sum', [one]) }, 'INVALID_ARGUMENT_COUNT', "sum shall not be able to be called with 1 number input" );
 	raises( function() { funExecutor.execute('sum', [lorem]) }, 'INVALID_ARGUMENT_COUNT', "sum shall not be able to be called with 1 word input" );
-	raises( function() { funExecutor.execute('sum', [lorem, ipsum]) }, 'INVALID_ARGUMENT_COUNT', "sum shall not be able to be called with 2 word inputs" );
-	raises( function() { funExecutor.execute('sum', [lorem, one]) }, 'INVALID_ARGUMENT_COUNT', "sum shall not be able to be called with 1 word and 1 number input" );
-	raises( function() { funExecutor.execute('sum', [one, lorem]) } , 'INVALID_ARGUMENT_COUNT', "sum shall not be able to be called with 1 number and 1 word input" );
+	raises( function() { funExecutor.execute('sum', [lorem, ipsum]) }, 'INVALID_INPUT_TYPE', "sum shall not be able to be called with 2 word inputs" );
+	raises( function() { funExecutor.execute('sum', [lorem, one]) }, 'INVALID_INPUT_TYPE', "sum shall not be able to be called with 1 word and 1 number input" );
+	raises( function() { funExecutor.execute('sum', [one, lorem]) } , 'INVALID_INPUT_TYPE', "sum shall not be able to be called with 1 number and 1 word input" );
 
 	deepEqual( funExecutor.execute('sum', [one, two]), three, "sum of 1 and 2 should be 3" );
 	deepEqual( funExecutor.execute('sum', [m_one, m_two]), m_three, "sum of -1 and -2 should be -3" );
@@ -68,6 +68,23 @@ test( "sum", function() {
 	deepEqual( funExecutor.execute('sum', [sm_one, sm_two]), m_three, 'sum of "-1 and "-2 should be -3' );
 	deepEqual( funExecutor.execute('sum', [s_four, s_five]), nine, 'sum of "4 and "5 should be 9' );
 	deepEqual( funExecutor.execute('sum', [sm_four, sm_five]), m_nine, 'sum of "-4 and "-5 should be -9' );	
+} );
 
+test( "difference", function() {
+	raises( function() { funExecutor.execute('difference', []) }, 'INVALID_ARGUMENT_COUNT', "difference shall not be able to be called with 0 inputs" );
+	raises( function() { funExecutor.execute('differenceum', [one]) }, 'INVALID_ARGUMENT_COUNT', "difference shall not be able to be called with 1 number input" );
+	raises( function() { funExecutor.execute('difference', [lorem]) }, 'INVALID_ARGUMENT_COUNT', "difference shall not be able to be called with 1 word input" );
+	raises( function() { funExecutor.execute('difference', [lorem, ipsum]) }, 'INVALID_INPUT_TYPE', "difference shall not be able to be called with 2 word inputs" );
+	raises( function() { funExecutor.execute('difference', [lorem, one]) }, 'INVALID_INPUT_TYPE', "difference shall not be able to be called with 1 word and 1 number input" );
+	raises( function() { funExecutor.execute('difference', [one, lorem]) } , 'INVALID_INPUT_TYPE', "difference shall not be able to be called with 1 number and 1 word input" );
 
+	deepEqual( funExecutor.execute('difference', [three, two]), one, "difference of 3 and 2 should be 1" );
+	deepEqual( funExecutor.execute('difference', [m_one, m_two]), one, "difference of -1 and -2 should be 1" );
+	deepEqual( funExecutor.execute('difference', [four, five]), m_one, "difference of 4 and 5 should be -1" );
+	deepEqual( funExecutor.execute('difference', [m_four, five]), m_nine, "difference of -4 and 5 should be -9" );
+
+	deepEqual( funExecutor.execute('difference', [s_three, s_two]), one, 'difference of "1 and "2 should be 3' );
+	deepEqual( funExecutor.execute('difference', [sm_one, sm_two]), one, 'difference of "-1 and "-2 should be 1' );
+	deepEqual( funExecutor.execute('difference', [s_four, s_five]), m_one, 'difference of "4 and "5 should be 9' );
+	deepEqual( funExecutor.execute('difference', [sm_four, s_five]), m_nine, 'difference of "-4 and "5 should be -9' );	
 } );

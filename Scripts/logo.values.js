@@ -1,4 +1,4 @@
-/* Logo Values module
+/* JSLogo Values module
  * Author: Tymoteusz Paszun
  *
  */

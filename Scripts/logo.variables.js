@@ -1,4 +1,4 @@
-/* Logo Variables module
+/* JSLogo Variables module
  * Author: Tymoteusz Paszun
  *
  */
