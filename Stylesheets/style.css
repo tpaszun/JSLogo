@@ -1,0 +1,47 @@
+body, pre, #input { 
+	font-family: Consolas, Courier, "Courier New", monospace, serif;
+	font-size: 12px;
+}
+
+.error {
+	color: red;
+	font-weight: 600;
+}
+
+.redbold {
+	color: red;
+	font-weight: bold;
+}
+
+canvas#turtleCanvas {
+	height: 70%;
+	width: 100%;
+	border: 1px solid black;
+
+	-webkit-transition:all 1.0s ease-in-out;
+	-moz-transition:all 1.0s ease-in-out;
+	-o-transition:all 1.0s ease-in-out;
+	-ms-transition:all 1.0s ease-in-out;	
+	transition:all 1.0s ease-in-out;
+}
+
+#command_prompt {
+	float: left;
+}
+
+div#console {
+	height: 28%;
+	overflow: auto;
+}
+
+input#input {
+	border: 0;
+	width: 90%;
+	margin: 0;
+    padding: 0;
+    float: left;
+}
+
+input:focus {
+    outline: none;
+}

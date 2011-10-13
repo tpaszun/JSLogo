@@ -1,0 +1,22 @@
+; print 0 .. 9
+make "x 0 make "commands [ print :x make "x sum :x 1 ] make "ntimes 10 repeat :ntimes :commands
+
+; print triangle
+make "n 0 repeat 5 [ make "n sum :n 1 repeat :n [type ".] flush ]
+
+; square
+clearscreen make "x 100 make "side [forward :x left 90] repeat 4 :side
+
+; spirala kwadratowa
+clearscreen make "angle 90 make "y 5 make "x 0 repeat 30 [make "x sum :x :y forward :x left :angle]
+
+; spirala
+clearscreen make "angle 25 make "y 0.5 make "x 0 repeat 100 [make "x sum :x :y forward :x left :angle]
+
+; flower
+clearscreen repeat 36 [ right 10 repeat 360 [ forward 1 right 1 ] ]
+
+clearscreen repeat 8 [right 45 repeat 6 [repeat 90 [forward 2 right 2] right 90]]
+
+; :type = 1-6 różne wyniki
+clearscreen make "type 6 repeat 8 [right 45 repeat :type [repeat 90 [forward 2 right 2] right 90]]

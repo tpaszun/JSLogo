@@ -1,0 +1,824 @@
+#LyX 1.6.9 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language english
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Tim's Logo Interpreter
+\end_layout
+
+\begin_layout Author
+Tymoteusz Paszun
+\end_layout
+
+\begin_layout Author
+Informatyka Stosowana III.
+ rok
+\end_layout
+
+\begin_layout Date
+11.10.2011r.
+\end_layout
+
+\begin_layout Section
+Opis programu
+\end_layout
+
+\begin_layout Standard
+Program 
+\family typewriter
+Tim's Logo Interpreter
+\family default
+ jest implementacją interpretera podzbioru języka 
+\family typewriter
+Logo
+\family default
+.
+ Inspirowany jest 
+\family typewriter
+UCBLogo
+\family default
+, który jest uznawany za standard de facto składni 
+\family typewriter
+Logo
+\family default
+.
+ Wszędzie gdzie jest to możliwe (oraz pozwala na to zastosowany sposób implement
+acji) zachowana jest zgodność z 
+\family typewriter
+UCBLogo
+\family default
+.
+ Mimo, że 
+\family typewriter
+UCBLogo
+\family default
+ jest programem o otwartym kodzie źródłowym 
+\family typewriter
+Tim's Logo Interpreter
+\family default
+ kończy swoje podobieństwo doń na składni i sposobie interpretacji poleceń
+ - implementacja jest autorska i wykorzystuje zupełnie inne mechanizmy oraz
+ struktury danych.
+\end_layout
+
+\begin_layout Section
+Gramatyka
+\end_layout
+
+\begin_layout Standard
+Język 
+\family typewriter
+Logo
+\family default
+ został oryginalnie zaprojektowany jako język funkcyjny szeroko czerpiący
+ z 
+\family typewriter
+Lisp
+\family default
+-u.
+ Zbiór tokenów 
+\family typewriter
+Logo
+\family default
+ jest niewielki, wobec czego budowa skanera jest prosta.
+ Jednak fakt, że 
+\family typewriter
+Logo
+\family default
+ praktycznie nie posiada słów kluczowych powoduje, że nie jest możliwe napisanie
+ parsera, który będzie tworzyć drzewo syntaktyczne wprowadzonych poleceń
+ bez ich uprzedniej interpretacji.
+ Wobec tego 
+\family typewriter
+Tim's Logo Interpreter
+\family default
+ korzysta ze skanera, oraz prostego quasi-parsera, który steruje działaniem
+ interpretera.
+\end_layout
+
+\begin_layout Subsection
+Zbiór tokenów skanera
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="3">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Wyrażenie regularne
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Nazwa Tokena
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Opis
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+[
+\backslash
+[]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+OPEN_LIST
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nawias otwierający listę
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+[
+\backslash
+]]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+CLOSE_LIST
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nawias zamykający listę
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+[0-9]+("."[0-9]+)?
+\backslash
+b
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+NUMBER
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+wartość - liczba 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+["][0-9a-zA-Z"."]+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+WORD
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+wartość - słowo
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+[:][0-9a-zA-Z"."]+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+THING
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+wartość - zmienna
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+[a-zA-Z"."]+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+IDENTIFIER
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+identyfikator polecenia
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Należy zauważyć, że tokeny 
+\family typewriter
+NUMBER
+\family default
+, 
+\family typewriter
+WORD
+\family default
+, 
+\family typewriter
+THING
+\family default
+ odpowiadają za dostarczanie wartości wypełniających wejścia poleceń.
+ Podobnie działają listy (zamknięte pomiędzy 
+\family typewriter
+[
+\family default
+ oraz 
+\family typewriter
+]
+\family default
+), jednak należy zauważyć (co nie jest realizowane w skanerze), że ich wnętrze
+ - pomimo możliwości dostarczania przez skaner całego zbioru tokenów - jest
+ interpretowane jako zbiór wartości.
+\end_layout
+
+\begin_layout Subsection
+Gramatyka parsera
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+%start expressions
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%%
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+expressions 	
+\end_layout
+
+\begin_layout Plain Layout
+
+	: many EOF			
+\end_layout
+
+\begin_layout Plain Layout
+
+	;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+many
+\end_layout
+
+\begin_layout Plain Layout
+
+	: single many
+\end_layout
+
+\begin_layout Plain Layout
+
+	| single
+\end_layout
+
+\begin_layout Plain Layout
+
+	;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+single
+\end_layout
+
+\begin_layout Plain Layout
+
+	: OPEN_LIST
+\end_layout
+
+\begin_layout Plain Layout
+
+	| CLOSE_LIST
+\end_layout
+
+\begin_layout Plain Layout
+
+	| WORD
+\end_layout
+
+\begin_layout Plain Layout
+
+	| THING
+\end_layout
+
+\begin_layout Plain Layout
+
+	| IDENTIFIER
+\end_layout
+
+\begin_layout Plain Layout
+
+	| NUMBER
+\end_layout
+
+\begin_layout Plain Layout
+
+	;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Kod parsera w notacji BNF jest trywialny - ma on za zadanie dostarczać odpowiedn
+ie dane interpreterowi.
+ Zasadniczo możliwym jest napędzanie interpretera bezpośrednio wyjściem
+ skanera - jednak w implementacji zastosowano ten prosty parser dla wygody
+ wywoływania odpowiednich metod interpretera.
+\end_layout
+
+\begin_layout Section
+Opis struktury logicznej programu
+\end_layout
+
+\begin_layout Standard
+Program 
+\family typewriter
+Tim's Logo Interpreter
+\family default
+ został napisany z wykorzystaniem paradygmatu obiektowego.
+ Interfejs użytkownika obsługiwany jest przez:
+\end_layout
+
+\begin_layout Itemize
+klasę 
+\family typewriter
+Console
+\family default
+ - dostarcza metod standardowego wejścia i wyjścia
+\end_layout
+
+\begin_layout Itemize
+klasę 
+\family typewriter
+TurtleConsole
+\family default
+ - dostarcza medod sterowania grafiką żółwia
+\end_layout
+
+\begin_layout Standard
+Oprócz generowanego parsera program wykorzystuje własne mechanizmy:
+\end_layout
+
+\begin_layout Itemize
+klasę 
+\family typewriter
+Interpreter
+\family default
+ - silnik interpretera
+\end_layout
+
+\begin_layout Itemize
+klasę 
+\family typewriter
+IntepretersStack
+\family default
+ - stos wywołań interpretera
+\end_layout
+
+\begin_layout Itemize
+klasę 
+\family typewriter
+FunctionContainer
+\family default
+ - kontener zdefiniowanych poleceń
+\end_layout
+
+\begin_layout Itemize
+klasę 
+\family typewriter
+FunctionExecutor
+\family default
+ - moduł wykonywania poleceń
+\end_layout
+
+\begin_layout Itemize
+klasę 
+\family typewriter
+VariableContainer
+\family default
+ - kontener zdefiniowanych zmiennych
+\end_layout
+
+\begin_layout Standard
+Interpreter napędzany jest kolejnymi tokenami dostarczanymi przez skaner/parser.
+ Posiada on dwa stany (
+\family typewriter
+ST_INTERPRET
+\family default
+, 
+\family typewriter
+ST_ENTER_LIST
+\family default
+), w zależności od stanu wykonuje odpowiednie operacje na dostarczanych
+ tokenach.
+ Dla stanu 
+\family typewriter
+ST_ENTER_LIST
+\family default
+ wszystkie tokeny traktowane są jak wartość (słowo) oraz dopisywane do aktualnie
+ wprowadzanej listy.
+ Stan 
+\family typewriter
+ST_INTERPRET
+\family default
+ jest stanem startowym i w stanie tym na tokenach wykonywane są odpowiadające
+ im operacje:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+NUMBER
+\family default
+, 
+\family typewriter
+THING
+\family default
+, 
+\family typewriter
+WORD
+\family default
+ - dla tych tokenów wykonywana jest próba wprowadzenia wartości na wejście
+ wierzchołka stosu wywołań poleceń
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+OPEN_LIST
+\family default
+, 
+\family typewriter
+CLOSE_LIST
+\family default
+ - aktualizują stan interpretera
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+IDENTIFIER
+\family default
+ - odkłada na stos wywołanie polecenia
+\end_layout
+
+\begin_layout Standard
+Kiedy do polecenia na wierzchołku stosu wywołań zostanie dostarczona wymagana
+ ilość wejść następuje ściągnięcie polecenia ze stosu oraz jego wykonanie
+ przez 
+\family typewriter
+FunctionExecutor
+\family default
+.
+ Wykonane polecenie może również dostarczyć wartości, która to dalej jest
+ przekazywana na wejście uaktualnionego wierzchołka stosu wywołań.
+\end_layout
+
+\begin_layout Section
+Informacje o stosowanych pakietach zewnętrznych i programach narzędziowych
+\end_layout
+
+\begin_layout Standard
+Program 
+\family typewriter
+Tim's Logo Interpreter
+\family default
+ napisany został w języku 
+\family typewriter
+JavaScript
+\family default
+ i stosuje nowy element standardu 
+\family typewriter
+HTML5
+\family default
+ - 
+\family typewriter
+canvas
+\family default
+.
+ Wykorzystuje również generator skanerów/parserów 
+\family typewriter
+Jison
+\family default
+, będący implementacją pakietu 
+\family typewriter
+bison
+\family default
+ dla języka 
+\family typewriter
+JavaScript
+\family default
+.
+ Kolejnym wykorzystanym modułem jest biblioteka do obsługi klas w języku
+ 
+\family typewriter
+JavaScript
+\family default
+ - 
+\family typewriter
+jsoo.js 
+\family default
+napisana przez Dariusza Dziuka.
+\end_layout
+
+\begin_layout Standard
+Stosowanym edytorem był 
+\family typewriter
+SublimeText 2
+\family default
+, system kontroli wersji 
+\family typewriter
+SVN
+\family default
+, oraz przeglądarki 
+\family typewriter
+Google Chrome
+\family default
+ oraz 
+\family typewriter
+Mozilla Firefox
+\family default
+ w najnowszych wersjach stabilnych.
+\end_layout
+
+\begin_layout Section
+Instrukcja obsługi
+\end_layout
+
+\begin_layout Standard
+Aby uruchomić 
+\family typewriter
+Tim's Logo Interpreter
+\family default
+ należy otworzyć plik 
+\family typewriter
+index.html
+\family default
+ z głównego katalogu projektu (lub też wejść na stronę 
+\family typewriter
+http://www.tymon.miropa.com.pl/Logo
+\family default
+) w przeglądarce obsługującej standard języka 
+\family typewriter
+ECMAScript
+\family default
+.
+ Po uruchomieniu programu można wywołać komendę 
+\family typewriter
+help
+\family default
+, która zwraca listę zdefiniowanych poleceń.
+ Po starcie program jest gotowy do interpretacji wprowadzanych wyrażeń.
+\end_layout
+
+\begin_layout Section
+Przykładowe programy
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+repeat 36 [ right 10 repeat 360 [forward 1 right 1]] 
+\end_layout
+
+\begin_layout Section
+Możliwe rozszerzenia programu
+\end_layout
+
+\begin_layout Standard
+Program 
+\family typewriter
+Tim's Logo Interpreter
+\family default
+ został tak zaprojektowany, aby możliwym stało się zaimplementowanie większości
+ mechanizmów języka 
+\family typewriter
+Logo
+\family default
+, znanych z 
+\family typewriter
+UCBLogo
+\family default
+.
+ Stosunkowo łatwymi do dodania są: 
+\end_layout
+
+\begin_layout Itemize
+możliwość definiowania funkcji użytkownika
+\end_layout
+
+\begin_layout Itemize
+wartości logiczne
+\end_layout
+
+\end_body
+\end_document
