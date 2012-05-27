@@ -1,4 +1,4 @@
-/* Logo Values module
+/* JSLogo Values module
  * Author: Tymoteusz Paszun
  *
  */
@@ -6,6 +6,7 @@
 const VAL_WORD = 0;
 const VAL_NUM = 1;
 const VAL_LIST = 2;
+
 const VAL_BOOL = 3;
 
 var Value = new Class( {

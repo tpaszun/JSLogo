@@ -1,8 +1,18 @@
+<<<<<<< HEAD
 /* Logo Functions module
+=======
+/* JSLogo Functions module
+>>>>>>> d8b46d9be98fc3b28d444eb259a2154529ad4ece
  * Author: Tymoteusz Paszun
  *
  */
 
+<<<<<<< HEAD
+=======
+const NODE_FN = 0;
+const NODE_VAL = 1;
+
+>>>>>>> d8b46d9be98fc3b28d444eb259a2154529ad4ece
 const FN_USERDEF = 0;
 const FN_BUILTIN = 1;
 
@@ -140,6 +150,7 @@ var BuiltInFunctions = {
 		return new Value(VAL_NUM, inputs[0].asNumber() / inputs[1].asNumber());
 	} ),
 
+<<<<<<< HEAD
 	word: new FunctionDefinition( 'word', 2, FN_BUILTIN, 
 	function (inputs) {
 		if (inputs[0].valType == VAL_LIST) {
@@ -153,6 +164,8 @@ var BuiltInFunctions = {
 		return new Value(VAL_WORD, inputs[0].asString() + inputs[1].asString());
 	} ),
 
+=======
+>>>>>>> d8b46d9be98fc3b28d444eb259a2154529ad4ece
 	make: new FunctionDefinition( 'make', 2, FN_BUILTIN, 
 	function (inputs) {
 		if (inputs[0].valType == VAL_LIST) {
@@ -252,7 +265,11 @@ var BuiltInFunctions = {
 
 		return new Value( VAL_NUM, Math.floor( Math.random() * tmpNum ) );
 
+<<<<<<< HEAD
 	} ),
+=======
+	} ),	
+>>>>>>> d8b46d9be98fc3b28d444eb259a2154529ad4ece
 
 }
 

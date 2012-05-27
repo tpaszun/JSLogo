@@ -1,4 +1,4 @@
-/* Logo Turtle Graphics Console module
+/* JSLogo Turtle Graphics Console module
  * Author: Tymoteusz Paszun
  * 
  * Requires: 

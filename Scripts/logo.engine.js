@@ -1,4 +1,4 @@
-/* General module
+/* JSLogo General module
  * Author: Tymoteusz Paszun
  *
  */

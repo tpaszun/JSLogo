@@ -1,4 +1,4 @@
-/* Logo Interpreters stack module
+/* JSLogo Interpreters stack module
  * Author: Tymoteusz Paszun
  *
  */
