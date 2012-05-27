@@ -6,7 +6,6 @@
 const VAL_WORD = 0;
 const VAL_NUM = 1;
 const VAL_LIST = 2;
-
 const VAL_BOOL = 3;
 
 var Value = new Class( {
@@ -48,6 +47,9 @@ var Value = new Class( {
 				retStr += ']';
 				return retStr;
 				break;
+			case VAL_BOOL:
+				return this.val?'true':'false';
+				break;
 		}
 	},
 
@@ -81,6 +83,41 @@ var Value = new Class( {
 				break;
 		}
 */
+	},
+
+	isBoolean: function() {
+		return (this.valType == VAL_BOOL) || ((this.valType == VAL_WORD) && ( (this.val.toLowerCase() == "true") || (this.val.toLowerCase() == "false") ));
+	},
+
+	asBoolean: function() {
+		var err;
+
+		if ( this.isBoolean() ) {
+			switch (this.valType) {
+				case VAL_BOOL:
+					return this.val;
+					break;
+				case VAL_WORD:
+					if (this.val.toLowerCase() == "true") {
+						return true;
+						break;
+					} 
+					else if (this.val.toLowerCase() == "false") {
+						return false;
+						break;
+					}
+					else {
+						err = new Error('INVALID_INPUT_TYPE');
+						err.invalidInput = this;
+						throw err;
+					}
+			}
+		}
+		else {
+			err = new Error('INVALID_INPUT_TYPE');
+			err.invalidInput = this;
+			throw err;
+		}
 	}
 
 } );

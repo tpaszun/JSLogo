@@ -103,11 +103,13 @@
 					this.updateFunStackTop();
 					break;
 				case WORD: 
+					//this.putValueOnCallStackTopInput( new Value(VAL_WORD, identifier) ); // New lexer outputs WORDS, THINGS without '"'' and ':'' chars
 					this.putValueOnCallStackTopInput( new Value(VAL_WORD, identifier.substring(1, identifier.length)) );
 					break;
 				case THING:
 					this.funStack.push( new FunctionStackElement('thing') );
 					this.updateFunStackTop();
+					//this.putValueOnCallStackTopInput( new Value(VAL_WORD, identifier) );
 					this.putValueOnCallStackTopInput( new Value(VAL_WORD, identifier.substring(1, identifier.length)) );
 					break;
 				case NUMBER:
@@ -194,6 +196,14 @@
 		else { // if there is another opened list
 			this.listStackTop.val.push(list);
 		}
+	},
+
+	openParen: function() {
+
+	},
+
+	closeParen: function() {
+
 	},
 	
 	setInterpretState: function() {

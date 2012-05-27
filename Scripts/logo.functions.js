@@ -3,9 +3,6 @@
  *
  */
 
-const NODE_FN = 0;
-const NODE_VAL = 1;
-
 const FN_USERDEF = 0;
 const FN_BUILTIN = 1;
 
@@ -143,6 +140,19 @@ var BuiltInFunctions = {
 		return new Value(VAL_NUM, inputs[0].asNumber() / inputs[1].asNumber());
 	} ),
 
+	word: new FunctionDefinition( 'word', 2, FN_BUILTIN, 
+	function (inputs) {
+		if (inputs[0].valType == VAL_LIST) {
+			InvalidInputType(inputs[0]);	
+		}
+
+		if (inputs[1].valType == VAL_LIST) {
+			InvalidInputType(inputs[1]);	
+		}
+
+		return new Value(VAL_WORD, inputs[0].asString() + inputs[1].asString());
+	} ),
+
 	make: new FunctionDefinition( 'make', 2, FN_BUILTIN, 
 	function (inputs) {
 		if (inputs[0].valType == VAL_LIST) {
@@ -242,7 +252,7 @@ var BuiltInFunctions = {
 
 		return new Value( VAL_NUM, Math.floor( Math.random() * tmpNum ) );
 
-	} ),	
+	} ),
 
 }
 

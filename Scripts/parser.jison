@@ -1,6 +1,8 @@
 %lex
 %%
 \s+						/* skip whitespace */
+[\(]					return 'OPEN_PAREN'
+[\)]					return 'CLOSE_PAREN'
 [\[]					return 'OPEN_LIST'
 [\]]					return 'CLOSE_LIST'
 [0-9]+("."[0-9]+)?\b	return 'NUMBER'
@@ -26,7 +28,13 @@ many
 	;
 
 single
-	: OPEN_LIST			{
+	:OPEN_PAREN			{
+							interpretersStack.getTopInterpreter().openParen();
+						}
+	| CLOSE_PAREN		{
+							interpretersStack.getTopInterpreter().closeParen();
+						}
+	| OPEN_LIST			{
 							interpretersStack.getTopInterpreter().openList();
 						}
 	| CLOSE_LIST		{

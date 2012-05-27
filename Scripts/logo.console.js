@@ -47,7 +47,8 @@ var Console = new Class( {
 			this.println(this.commandPromptChar + ' ' + text);
 
 			try {
-				parser.parse(text);	
+				//parser.parse(text);	
+				ExecutionManager.execute(text);
 			}
 			catch (err) {
 				this.logError(err.message);
